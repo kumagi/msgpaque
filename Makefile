@@ -16,9 +16,9 @@ MSGPACK_RPC_OBJS=$(PATH_MSGPACK_RPC)/*.o
 target:msgpaque
 #target:test
 
-msgpaque:main.o
+msgpaque:msgpaque.o
 	$(CXX) $^ -o $@ $(LD) $(OPTS) $(WARNS)  $(PATH_MSGPACK_RPC)/*.o -I$(PATH_MSGPACK_RPC)/ $(CCLOG_LD)
-main.o:main.cc
+msgpaque.o:msgpaque.cc
 	$(CXX) -c $^ -o $@ $(OPTS) $(WARNS)  $(PATH_MSGPACK_RPC)/*.o -I$(PATH_MSGPACK_RPC)/
 test:test.cc
 	$(CXX) $^ -o $@ $(GTEST_INC) $(TEST_LD) $(OPTS) $(WARNS) $(PATH_MSGPACK_RPC)/*.o -I$(PATH_MSGPACK_RPC)/  $(CCLOG_LD)
