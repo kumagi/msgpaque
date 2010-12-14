@@ -1,14 +1,15 @@
 CXX=g++
-OPTS=-std=c++0x -fexceptions -g -O0
-LD=-L/usr/local/lib -lboost_program_options -lmsgpack -lmpio -lglog
+OPTS= -fexceptions -g -O0
+LD=-L/usr/local/lib -lboost_program_options -lmsgpack -lmpio -lmsgpack-rpc -lboost_thread -lboost_filesystem
 PATH_MSGPACK_RPC=../msgpack-rpc/cpp/src/msgpack/rpc
 TEST_LD= -lpthread $(LD)
 CCLOG_LD=../msgpack-rpc/cpp/src/cclog/*.o
 GTEST_INC= -I$(GTEST_DIR)/include -I$(GTEST_DIR)
 GTEST_DIR=/opt/google/gtest-1.5.0
 GMOCK_DIR=/opt/google/gmock-1.5.0
+BOOST_ATOMIC_INC=.
 WARNS= -W -Wall -Wextra -Wformat=2 -Wstrict-aliasing=4 -Wcast-qual -Wcast-align \
-	-Wwrite-strings -Wfloat-equal -Wpointer-arith -Wswitch-enum
+	-Wwrite-strings -Wfloat-equal -Wpointer-arith
 NOTIFY=&& notify-send Test success! -i ~/themes/ok_icon.png || notify-send Test failed... -i ~/themes/ng_icon.png
 SRCS=$(HEADS) $(BODYS)
 MSGPACK_RPC_OBJS=$(PATH_MSGPACK_RPC)/*.o
@@ -17,11 +18,11 @@ target:msgpaque
 #target:test
 
 msgpaque:msgpaque.o
-	$(CXX) $^ -o $@ $(LD) $(OPTS) $(WARNS)  $(PATH_MSGPACK_RPC)/*.o -I$(PATH_MSGPACK_RPC)/ $(CCLOG_LD)
+	$(CXX) $^ -o $@ $(LD) $(OPTS) $(WARNS) -I.
 msgpaque.o:msgpaque.cc
-	$(CXX) -c $^ -o $@ $(OPTS) $(WARNS)  $(PATH_MSGPACK_RPC)/*.o -I$(PATH_MSGPACK_RPC)/
+	$(CXX) -c $^ -o $@ $(OPTS) $(WARNS) -I.
 test:test.cc
-	$(CXX) $^ -o $@ $(GTEST_INC) $(TEST_LD) $(OPTS) $(WARNS) $(PATH_MSGPACK_RPC)/*.o -I$(PATH_MSGPACK_RPC)/  $(CCLOG_LD)
+	$(CXX) $^ -o $@ $(GTEST_INC) $(TEST_LD) $(OPTS) $(WARNS) $(CCLOG_LD)
 	./logic_test $(NOTIFY)
 
 #obj_eval.i: obj_eval.hpp
